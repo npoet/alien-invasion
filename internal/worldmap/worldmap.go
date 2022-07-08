@@ -1,32 +1,18 @@
 package worldmap
 
 import (
+	"alien-invasion/internal/pkg"
 	"bufio"
 	"fmt"
 	"os"
 )
 
-type City struct {
-	name   string
-	north  *City
-	south  *City
-	east   *City
-	west   *City
-	aliens []string
-}
-
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
-
 func ReadRawMap(filename string) []string {
 	readFile, err := os.Open(filename)
-	check(err)
+	pkg.Check(err)
 	defer func(readFile *os.File) {
 		err := readFile.Close()
-		check(err)
+		pkg.Check(err)
 	}(readFile)
 
 	fileScanner := bufio.NewScanner(readFile)
@@ -40,17 +26,17 @@ func ReadRawMap(filename string) []string {
 	return rawMap
 }
 
-func GenerateMap(rawMap []string) [][]City {
-	var worldMap [][]City
+func GenerateMap(rawMap []string) [][]pkg.City {
+	var worldMap [][]pkg.City
 	for range rawMap {
 		// TODO: add city from line, split directions vs regex?
-		newCity := City{
-			name:   "", // all before first space
-			north:  nil,
-			south:  nil,
-			east:   nil,
-			west:   nil,
-			aliens: nil,
+		newCity := pkg.City{
+			Name:   "", // all before first space
+			North:  nil,
+			South:  nil,
+			East:   nil,
+			West:   nil,
+			Aliens: nil,
 		}
 		fmt.Print(newCity)
 		// TODO: insert city into map

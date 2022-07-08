@@ -1,14 +1,14 @@
 package invasion
 
 import (
-	"alien-invasion/internal/worldmap"
+	"alien-invasion/internal/pkg"
 	"fmt"
 	"github.com/brianvoe/gofakeit/v6"
 )
 
 type Alien struct {
 	name     string
-	location worldmap.City
+	location pkg.City
 }
 
 func genAliens(numAliens int) []Alien {
@@ -16,7 +16,7 @@ func genAliens(numAliens int) []Alien {
 	for i := 0; i < numAliens; i++ {
 		newAlien := Alien{
 			name:     gofakeit.HackerPhrase(),
-			location: worldmap.City{},
+			location: pkg.City{},
 		}
 		newAliens = append(newAliens, newAlien)
 		fmt.Println(newAlien)
