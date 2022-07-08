@@ -6,17 +6,12 @@ import (
 	"github.com/brianvoe/gofakeit/v6"
 )
 
-type Alien struct {
-	name     string
-	location pkg.City
-}
-
-func genAliens(numAliens int) []Alien {
-	var newAliens []Alien
+func genAliens(numAliens int) []pkg.Alien {
+	var newAliens []pkg.Alien
 	for i := 0; i < numAliens; i++ {
-		newAlien := Alien{
-			name:     gofakeit.HackerPhrase(),
-			location: pkg.City{},
+		newAlien := pkg.Alien{
+			Name:     gofakeit.HackerPhrase(),
+			Location: &pkg.City{},
 		}
 		newAliens = append(newAliens, newAlien)
 		fmt.Println(newAlien)

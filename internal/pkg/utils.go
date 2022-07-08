@@ -12,5 +12,10 @@ type City struct {
 	South  *City
 	East   *City
 	West   *City
-	Aliens []string
+	Aliens []*Alien
+}
+
+type Alien struct {
+	Name     string
+	Location *City
 }
