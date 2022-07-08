@@ -1,16 +1,23 @@
 package main
 
 import (
+	"alien-invasion/internal/invasion"
+	"alien-invasion/internal/pkg"
 	"alien-invasion/internal/worldmap"
 	"fmt"
 	"os"
+	"strconv"
 )
 
 func main() {
+	// get args from cli
 	args := os.Args[1:]
-	numAliens := args[0]
-	fmt.Println(numAliens + " aliens are invading!")
+	fmt.Println(args[0] + " aliens are invading!")
+	// read map from file
+	numAliens, err := strconv.Atoi(args[0])
+	pkg.Check(err)
 	rawMap := worldmap.ReadRawMap("mapsdata/map_test.txt")
 	gameMap := worldmap.GenerateMap(rawMap)
-	fmt.Print(gameMap)
+	// simulate invasion from read map
+	invasion.SimluateInvasion(numAliens, gameMap)
 }
