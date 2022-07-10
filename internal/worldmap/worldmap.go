@@ -5,6 +5,8 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"regexp"
+	"strings"
 )
 
 func ReadRawMap(filename string) []string {
@@ -26,22 +28,30 @@ func ReadRawMap(filename string) []string {
 	return rawMap
 }
 
-func GenerateMap(rawMap []string) [][]pkg.City {
-	var worldMap [][]pkg.City
-	for range rawMap {
-		// TODO: add city from line, split directions vs regex?
+func GenerateMap(rawMap []string) []pkg.City {
+	var worldMap []pkg.City
+	for i := range rawMap {
+		mapLine := strings.Fields(rawMap[i])
+		for j := 1; j < len(mapLine); j++ {
+			fmt.Println(mapLine[j])
+		}
+		north, _ := regexp.Compile("north=*s")
+		south, _ := regexp.Compile("south=*s")
+		east, _ := regexp.Compile("east=*s")
+		west, _ := regexp.Compile("west=*s")
+		// TODO: create cities from all uniques listed, use opposite directions for cities not
+		//		expressed in a mapfile line
+
 		newCity := pkg.City{
-			Name:   "", // all before first space
+			Name:   mapLine[0], // all before first space
 			North:  nil,
 			South:  nil,
 			East:   nil,
 			West:   nil,
-			Aliens: nil,
+			Aliens: []*pkg.Alien{},
 		}
-		fmt.Print(newCity)
-		// TODO: insert city into map
-		//		account for space needed around center or expand when necessary?
-		// worldMap = append(worldMap, newCity)
+		fmt.Println(newCity)
+		worldMap = append(worldMap, newCity)
 	}
 	return worldMap
 }

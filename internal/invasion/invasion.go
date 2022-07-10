@@ -3,25 +3,11 @@
 package invasion
 
 import (
-	"alien-invasion/internal/pkg"
+	aliens "alien-invasion/internal/aliens"
+	utils "alien-invasion/internal/pkg"
 	"fmt"
-	"github.com/brianvoe/gofakeit/v6"
+	"math/rand"
 )
-
-func genAliens(numAliens int) []pkg.Alien {
-	// genAliens creates numAliens Aliens with a random city choice from the names given in cities []string
-	// The genAliens func should be used only to create the initial 'board' state once a map is imported
-	var newAliens []pkg.Alien
-	for i := 0; i < numAliens; i++ {
-		newAlien := pkg.Alien{
-			Name:     gofakeit.NounCollectiveThing() + " " + gofakeit.BeerName(),
-			Location: &pkg.City{},
-		}
-		newAliens = append(newAliens, newAlien)
-		fmt.Println(newAlien)
-	}
-	return newAliens
-}
 
 func announceDestruction(cityName string, alienNames []string) {
 	// announceDestruction handles printing fight info to console, including the oxford comma bc important
@@ -39,21 +25,24 @@ func announceDestruction(cityName string, alienNames []string) {
 	fmt.Println(cityName + " has been destroyed by " + aliensList + "!")
 }
 
-func cityDestruction() {
+func cityDestruction(worldmap *[]utils.City) []utils.City {
 	// TODO: handle destruction of a city on the worldmap
+	return []utils.City{}
 }
 
-func SimluateInvasion(numAliens int, worldmap [][]pkg.City) {
+func SimluateInvasion(numAliens int, worldmap []utils.City) {
 	// TODO: import worldmap and gen aliens, add gameplay logic
 	//		separate func for gameplay?
 
-	aliens := genAliens(numAliens)
-	for range aliens {
-		// TODO: assign aliens to cities randomly based on worldmap input
-		// TODO: turn 1: check overlap on alien generation, destroy on impact!
+	invaders := aliens.GenAliens(numAliens)
+	// init assign of aliens to cities randomly based on worldmap input
+	for i := range invaders {
+		randomCity := rand.Intn(len(worldmap))
+		aliens.MoveAlien(&invaders[i], &worldmap[randomCity])
 	}
+	// TODO: turn 1: check overlap on aliens generation, destroy on impact!
 	// TODO: turn 2: aliens move, check and destroy (announceDestruction())
-	// TODO: turn n: all cities/aliens destroyed or 10,000 moves for each living alien
+	// TODO: turn n: all cities/aliens destroyed or 10,000 moves for each living aliens
 	// TODO: finally, print remaining cities in format of og file
-	fmt.Print(aliens)
+	fmt.Print(invaders)
 }
