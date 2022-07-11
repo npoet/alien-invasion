@@ -25,8 +25,15 @@ func announceDestruction(cityName string, alienNames []string) {
 	fmt.Println(cityName + " has been destroyed by " + aliensList + "!")
 }
 
-func cityDestruction(worldmap *[]utils.City) []utils.City {
+func cityDestruction(worldmap []utils.City) []utils.City {
 	// TODO: handle destruction of a city on the worldmap
+	//		step 1: check each city for multiple aliens
+	//for i := range worldmap {
+	//	aliens := worldmap[i].Aliens
+	//	if len(worldmap[i].Aliens) >= 2 {
+	//
+	//	}
+	//}
 	return []utils.City{}
 }
 
@@ -37,6 +44,7 @@ func SimluateInvasion(numAliens int, worldmap []utils.City) {
 	invaders := aliens.GenAliens(numAliens)
 	// init assign of aliens to cities randomly based on worldmap input
 	for i := range invaders {
+		fmt.Print(invaders[i].Name + ", ")
 		randomCity := rand.Intn(len(worldmap))
 		aliens.MoveAlien(&invaders[i], &worldmap[randomCity])
 	}
@@ -44,5 +52,4 @@ func SimluateInvasion(numAliens int, worldmap []utils.City) {
 	// TODO: turn 2: aliens move, check and destroy (announceDestruction())
 	// TODO: turn n: all cities/aliens destroyed or 10,000 moves for each living aliens
 	// TODO: finally, print remaining cities in format of og file
-	fmt.Print(invaders)
 }

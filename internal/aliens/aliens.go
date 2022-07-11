@@ -11,6 +11,7 @@ func GenAliens(numAliens int) []pkg.Alien {
 	// The genAliens func should be used only to create the initial 'board' state once a map is imported
 	var newAliens []pkg.Alien
 	for i := 0; i < numAliens; i++ {
+		// somehow the best way to create some alien-sounding names
 		names := strings.Fields(gofakeit.LoremIpsumSentence(3))
 		newAlien := pkg.Alien{
 			Name:     names[0] + names[1],
