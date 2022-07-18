@@ -5,6 +5,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"regexp"
 	"strings"
 )
 
@@ -31,30 +32,49 @@ func GenerateMap(rawMap []string) []pkg.City {
 	var worldMap []pkg.City
 	for i := range rawMap {
 		mapLine := strings.Fields(rawMap[i])
-		// var cityNames []string
 		for j := 1; j < len(mapLine); j++ {
+			var cityNames []string
 			// TODO: create cities from all uniques listed, use opposite directions for cities not
 			//		expressed in a mapfile line
+			n, _ := regexp.Compile("north=(.*)")
+			north := n.FindStringSubmatch(mapLine[j])
+			if len(north) >= 1 {
+				// TODO: make city obj from each unique in city slice created above
+				cityNames = append(cityNames, north[1])
+			}
+			s, _ := regexp.Compile("south=(.*)")
+			south := s.FindStringSubmatch(mapLine[j])
+			if len(south) >= 1 {
+				// TODO: make city obj from each unique in city slice created above
+				cityNames = append(cityNames, south[1])
+			}
+			e, _ := regexp.Compile("east=(.*)")
+			east := e.FindStringSubmatch(mapLine[j])
+			if len(east) >= 1 {
+				// TODO: make city obj from each unique in city slice created above
+				cityNames = append(cityNames, east[1])
+			}
+			w, _ := regexp.Compile("west=(.*)")
+			west := w.FindStringSubmatch(mapLine[j])
+			if len(west) >= 1 {
+				// TODO: make city obj from each unique in city slice created above
+				cityNames = append(cityNames, west[1])
+			}
+			for i := range cityNames {
+				fmt.Print(cityNames[i] + " ")
 
-			//north, _ := regexp.Compile("north=*s")
-			//south, _ := regexp.Compile("south=*s")
-			//east, _ := regexp.Compile("east=*s")
-			//west, _ := regexp.Compile("west=*s")
-			//cityNames = append(cityNames, "")
-			fmt.Println(mapLine[j])
+				newCity := pkg.City{
+					Name:   mapLine[0], // all before first space
+					North:  nil,
+					South:  nil,
+					East:   nil,
+					West:   nil,
+					Aliens: []*pkg.Alien{},
+				}
+				worldMap = append(worldMap, newCity)
+			}
 		}
-		// TODO: make city obj from each unique in city slice created above
-
-		newCity := pkg.City{
-			Name:   mapLine[0], // all before first space
-			North:  nil,
-			South:  nil,
-			East:   nil,
-			West:   nil,
-			Aliens: []*pkg.Alien{},
-		}
-		fmt.Println(newCity)
-		worldMap = append(worldMap, newCity)
+		fmt.Println("")
 	}
 	return worldMap
 }
