@@ -8,7 +8,7 @@ import (
 	"fmt"
 )
 
-func AnnounceDestruction(cityName string, aliens map[string]*utils.Alien) {
+func AnnounceDestruction(cityName string, aliens map[string]*utils.Alien) string {
 	// announceDestruction handles printing fight info to console, including the oxford comma bc important
 	var alienNames []string
 	for i := range aliens {
@@ -25,7 +25,7 @@ func AnnounceDestruction(cityName string, aliens map[string]*utils.Alien) {
 	} else {
 		panic("Not enough alienNames to fight...")
 	}
-	fmt.Println(cityName + " has been destroyed by " + aliensList + "!")
+	return cityName + " has been destroyed by " + aliensList + "!"
 }
 
 func DestroyCity(city *utils.City, worldmap map[string]*utils.City, invaders map[string]utils.Alien) {
@@ -59,7 +59,7 @@ func SimulateInvasion(numAliens int, worldmap map[string]*utils.City) map[string
 		for k := range worldmap {
 			if len(worldmap[k].Aliens) >= 2 {
 				// if greater than 2 aliens in a city: announceDestruction and destroyCity
-				AnnounceDestruction(worldmap[k].Name, worldmap[k].Aliens)
+				fmt.Println(AnnounceDestruction(worldmap[k].Name, worldmap[k].Aliens))
 				DestroyCity(worldmap[k], worldmap, invaders)
 			}
 		}
