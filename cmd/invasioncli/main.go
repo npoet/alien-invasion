@@ -22,5 +22,5 @@ func main() {
 	// simulate invasion from read map
 	finalMap := invasion.SimulateInvasion(numAliens, simMap)
 	// print out remaining world state in original format 'Foo north=Bar west=Baz south=Qu-ux'
-	pkg.PrintMap(finalMap, rawMap)
+	pkg.PrintMap(finalMap)
 }

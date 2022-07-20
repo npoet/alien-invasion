@@ -44,9 +44,10 @@ func GenerateMap(rawMap []string) map[string]*pkg.City {
 			if !isCreated {
 				// create city from line start name if unique
 				initCity := pkg.City{
-					Name:   mapLine[0],
-					Links:  map[*pkg.City]bool{},
-					Aliens: map[string]*pkg.Alien{},
+					Name:    mapLine[0],
+					Links:   map[*pkg.City]bool{},
+					Aliens:  map[string]*pkg.Alien{},
+					Initial: strings.Join(mapLine[1:], " "),
 				}
 				// add name to 'set' and worldmap after city creation
 				cityNames[mapLine[0]] = true
@@ -62,9 +63,10 @@ func GenerateMap(rawMap []string) map[string]*pkg.City {
 				if !isCreated {
 					// create new
 					newCity := pkg.City{
-						Name:   match[k],
-						Links:  map[*pkg.City]bool{worldMap[mapLine[0]]: true},
-						Aliens: map[string]*pkg.Alien{},
+						Name:    match[k],
+						Links:   map[*pkg.City]bool{worldMap[mapLine[0]]: true},
+						Aliens:  map[string]*pkg.Alien{},
+						Initial: pkg.ReverseMap(mapLine[j], mapLine[0]),
 					}
 					// add to worldmap, names
 					worldMap[newCity.Name] = &newCity
