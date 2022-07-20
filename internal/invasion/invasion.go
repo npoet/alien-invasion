@@ -6,7 +6,6 @@ import (
 	aliens "alien-invasion/internal/aliens"
 	utils "alien-invasion/internal/pkg"
 	"fmt"
-	"math/rand"
 )
 
 func announceDestruction(cityName string, alienNames []string) {
@@ -25,7 +24,7 @@ func announceDestruction(cityName string, alienNames []string) {
 	fmt.Println(cityName + " has been destroyed by " + aliensList + "!")
 }
 
-func cityDestruction(worldmap []utils.City) []utils.City {
+func destroyCity(worldmap []utils.City) []utils.City {
 	// TODO: handle destruction of a city on the worldmap
 	//		step 1: check each city for multiple aliens
 	//for i := range worldmap {
@@ -37,19 +36,27 @@ func cityDestruction(worldmap []utils.City) []utils.City {
 	return []utils.City{}
 }
 
-func SimluateInvasion(numAliens int, worldmap []utils.City) {
+func SimluateInvasion(numAliens int, worldmap map[string]*utils.City) {
 	// TODO: import worldmap and gen aliens, add gameplay logic
 	//		separate func for gameplay?
 
 	invaders := aliens.GenAliens(numAliens)
-	// init assign of aliens to cities randomly based on worldmap input
+	// turn 0: init assignment of aliens to cities randomly based on worldmap input
 	for i := range invaders {
-		fmt.Print(invaders[i].Name + ", ")
-		randomCity := rand.Intn(len(worldmap))
-		aliens.MoveAlien(&invaders[i], &worldmap[randomCity])
+		aliens.AssignAlien(&invaders[i], worldmap)
 	}
-	// TODO: turn 1: check overlap on aliens generation, destroy on impact!
-	// TODO: turn 2: aliens move, check and destroy (announceDestruction())
-	// TODO: turn n: all cities/aliens destroyed or 10,000 moves for each living aliens
-	// TODO: finally, print remaining cities in format of og file
+	// aliens move up to 10000 times
+	for j := 0; j <= 10000; j++ {
+		// turn 1: check overlap on aliens generation, destroy on impact!
+		for k := range worldmap {
+			if len(worldmap[k].Aliens) >= 2 {
+				// TODO: announceDestruction and destroyCity
+			}
+			for i := range invaders {
+				aliens.MoveAlien(&invaders[i], worldmap)
+			}
+			// TODO: turn n: all cities/aliens destroyed or 10,000 moves for each living aliens
+		}
+		// TODO: finally, print remaining cities in format of og file
+	}
 }
