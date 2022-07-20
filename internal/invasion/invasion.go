@@ -8,7 +8,7 @@ import (
 	"fmt"
 )
 
-func announceDestruction(cityName string, aliens map[string]*utils.Alien) {
+func AnnounceDestruction(cityName string, aliens map[string]*utils.Alien) {
 	// announceDestruction handles printing fight info to console, including the oxford comma bc important
 	var alienNames []string
 	for i := range aliens {
@@ -28,7 +28,7 @@ func announceDestruction(cityName string, aliens map[string]*utils.Alien) {
 	fmt.Println(cityName + " has been destroyed by " + aliensList + "!")
 }
 
-func destroyCity(city *utils.City, worldmap map[string]*utils.City, invaders map[string]utils.Alien) {
+func DestroyCity(city *utils.City, worldmap map[string]*utils.City, invaders map[string]utils.Alien) {
 	// destroyCity handles removal of a city from the worldmap
 	// remove city from all links
 	for i := range worldmap {
@@ -59,8 +59,8 @@ func SimulateInvasion(numAliens int, worldmap map[string]*utils.City) map[string
 		for k := range worldmap {
 			if len(worldmap[k].Aliens) >= 2 {
 				// if greater than 2 aliens in a city: announceDestruction and destroyCity
-				announceDestruction(worldmap[k].Name, worldmap[k].Aliens)
-				destroyCity(worldmap[k], worldmap, invaders)
+				AnnounceDestruction(worldmap[k].Name, worldmap[k].Aliens)
+				DestroyCity(worldmap[k], worldmap, invaders)
 			}
 		}
 		// attempt to move each alien once per turn
