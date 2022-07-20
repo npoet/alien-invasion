@@ -26,6 +26,7 @@ func Check(e error) {
 
 func PrintMap(worldmap map[string]*City) {
 	// PrintMap prints the final map in the format of the input text file
+	fmt.Println("Final map output:")
 	keys := map[string]bool{}
 	for i := range worldmap {
 		keys[worldmap[i].Name] = true
