@@ -7,10 +7,10 @@ import (
 	"strings"
 )
 
-func GenAliens(numAliens int) []pkg.Alien {
+func GenAliens(numAliens int) map[string]pkg.Alien {
 	// genAliens creates numAliens Aliens with a random city choice from the names given in cities []string
 	// The genAliens func should be used only to create the initial 'board' state once a map is imported
-	var newAliens []pkg.Alien
+	newAliens := map[string]pkg.Alien{}
 	for i := 0; i < numAliens; i++ {
 		// somehow the best way to create some alien-sounding names
 		names := strings.Fields(gofakeit.LoremIpsumSentence(3))
@@ -18,12 +18,12 @@ func GenAliens(numAliens int) []pkg.Alien {
 			Name:     names[0] + names[1],
 			Location: &pkg.City{},
 		}
-		newAliens = append(newAliens, newAlien)
+		newAliens[newAlien.Name] = newAlien
 	}
 	return newAliens
 }
 
-func AssignAlien(alien *pkg.Alien, worldmap map[string]*pkg.City) {
+func AssignAlien(alien pkg.Alien, worldmap map[string]*pkg.City) {
 	// AssignAlien handles assigning a given alien to a city and updating aliens/city objects
 	// get random city from map, select random seed and get keys (arbitrary order return + random seed)
 	i := rand.Intn(len(worldmap))
@@ -32,12 +32,12 @@ func AssignAlien(alien *pkg.Alien, worldmap map[string]*pkg.City) {
 		keys = append(keys, k)
 	}
 	// add alien to random city
-	worldmap[keys[i]].Aliens[alien.Name] = alien
+	worldmap[keys[i]].Aliens[alien.Name] = &alien
 	// add city to alien
 	alien.Location = worldmap[keys[i]]
 }
 
-func MoveAlien(alien *pkg.Alien, worldmap map[string]*pkg.City) {
+func MoveAlien(alien pkg.Alien, worldmap map[string]*pkg.City) {
 	// MoveAlien handles moving a given alien from their current city to a random one from its links
 	// get random city from Links, select random seed and get keys (arbitrary order return + random seed)
 	// only move alien if links are available
@@ -48,7 +48,7 @@ func MoveAlien(alien *pkg.Alien, worldmap map[string]*pkg.City) {
 			keys = append(keys, *k)
 		}
 		// add alien to random city from links
-		worldmap[keys[i].Name].Aliens[alien.Name] = alien
+		worldmap[keys[i].Name].Aliens[alien.Name] = &alien
 		// remove alien from current city
 		delete(alien.Location.Aliens, alien.Name)
 		// set location on alien
