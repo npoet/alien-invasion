@@ -32,7 +32,7 @@ func AssignAlien(alien *pkg.Alien, worldmap map[string]*pkg.City) {
 		keys = append(keys, k)
 	}
 	// add alien to random city
-	worldmap[keys[i]].Aliens = append(worldmap[keys[i]].Aliens, alien)
+	worldmap[keys[i]].Aliens[alien.Name] = alien
 	// add city to alien
 	alien.Location = worldmap[keys[i]]
 }
@@ -48,8 +48,10 @@ func MoveAlien(alien *pkg.Alien, worldmap map[string]*pkg.City) {
 			keys = append(keys, *k)
 		}
 		// add alien to random city from links
-		worldmap[keys[i].Name].Aliens = append(worldmap[keys[i].Name].Aliens, alien)
-		// add city to alien
+		worldmap[keys[i].Name].Aliens[alien.Name] = alien
+		// remove alien from current city
+		delete(alien.Location.Aliens, alien.Name)
+		// set location on alien
 		alien.Location = worldmap[keys[i].Name]
 	}
 }
