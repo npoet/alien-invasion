@@ -3,78 +3,80 @@ package worldmap
 import (
 	"alien-invasion/internal/pkg"
 	"bufio"
-	"fmt"
 	"os"
 	"regexp"
 	"strings"
 )
 
 func ReadRawMap(filename string) []string {
+	// ReadRawMap takes a filename input and reads map from text, returning slice of strings for sim
 	readFile, err := os.Open(filename)
 	pkg.Check(err)
+	// defer file closure, handle errors
 	defer func(readFile *os.File) {
 		err := readFile.Close()
 		pkg.Check(err)
 	}(readFile)
-
+	// scan file by line
 	fileScanner := bufio.NewScanner(readFile)
 	fileScanner.Split(bufio.ScanLines)
 	var rawMap []string
-
+	// convert lines to string and add to rawMap
 	for fileScanner.Scan() {
 		rawMap = append(rawMap, fileScanner.Text())
-		fmt.Println(fileScanner.Text())
 	}
 	return rawMap
 }
 
-func GenerateMap(rawMap []string) []pkg.City {
-	var worldMap []pkg.City
+func GenerateMap(rawMap []string) map[string]*pkg.City {
+	// GenerateMap takes an input of string slice from map file and returns map of strings to City objects for sim
+	worldMap := map[string]*pkg.City{}
+	// 'set' to track existing cities
+	cityNames := map[string]bool{}
+	// iterate rawMap and create cities, add links:
 	for i := range rawMap {
+		// split each line of rawMap by whitespace
 		mapLine := strings.Fields(rawMap[i])
+		// for each entry in mapLine:
 		for j := 1; j < len(mapLine); j++ {
-			var cityNames []string
-			// TODO: create cities from all uniques listed, use opposite directions for cities not
-			//		expressed in a mapfile line
-			n, _ := regexp.Compile("north=(.*)")
-			north := n.FindStringSubmatch(mapLine[j])
-			if len(north) >= 1 {
-				// TODO: make city obj from each unique in city slice created above
-				cityNames = append(cityNames, north[1])
-			}
-			s, _ := regexp.Compile("south=(.*)")
-			south := s.FindStringSubmatch(mapLine[j])
-			if len(south) >= 1 {
-				// TODO: make city obj from each unique in city slice created above
-				cityNames = append(cityNames, south[1])
-			}
-			e, _ := regexp.Compile("east=(.*)")
-			east := e.FindStringSubmatch(mapLine[j])
-			if len(east) >= 1 {
-				// TODO: make city obj from each unique in city slice created above
-				cityNames = append(cityNames, east[1])
-			}
-			w, _ := regexp.Compile("west=(.*)")
-			west := w.FindStringSubmatch(mapLine[j])
-			if len(west) >= 1 {
-				// TODO: make city obj from each unique in city slice created above
-				cityNames = append(cityNames, west[1])
-			}
-			for i := range cityNames {
-				fmt.Print(cityNames[i] + " ")
-
-				newCity := pkg.City{
-					Name:   mapLine[0], // all before first space
-					North:  nil,
-					South:  nil,
-					East:   nil,
-					West:   nil,
+			// add cityname from line start if unique
+			isCreated := cityNames[mapLine[0]]
+			if !isCreated {
+				// create city from line start name if unique
+				initCity := pkg.City{
+					Name:   mapLine[0],
+					Links:  map[*pkg.City]bool{},
 					Aliens: []*pkg.Alien{},
 				}
-				worldMap = append(worldMap, newCity)
+				// add name to 'set' and worldmap after city creation
+				cityNames[mapLine[0]] = true
+				worldMap[mapLine[0]] = &initCity
+			}
+			// compile regex to find remaining cities in line from directions
+			r, _ := regexp.Compile("=(.*)")
+			// match after equals sign, the directions themselves don't necessarily matter
+			match := r.FindStringSubmatch(mapLine[j])
+			for k := 1; k < len(match); k++ {
+				// create cities from uniques, skip first entry
+				isCreated := cityNames[match[k]]
+				if !isCreated {
+					// create new
+					newCity := pkg.City{
+						Name:   match[k],
+						Links:  map[*pkg.City]bool{worldMap[mapLine[0]]: true},
+						Aliens: []*pkg.Alien{},
+					}
+					// add to worldmap, names
+					worldMap[newCity.Name] = &newCity
+					cityNames[match[k]] = true
+					// add link to initial city in line
+					worldMap[mapLine[0]].Links[&newCity] = true
+				} else {
+					// add link to initial city in line
+					worldMap[mapLine[0]].Links[worldMap[match[k]]] = true
+				}
 			}
 		}
-		fmt.Println("")
 	}
 	return worldMap
 }
