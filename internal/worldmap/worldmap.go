@@ -46,7 +46,7 @@ func GenerateMap(rawMap []string) map[string]*pkg.City {
 				initCity := pkg.City{
 					Name:   mapLine[0],
 					Links:  map[*pkg.City]bool{},
-					Aliens: []*pkg.Alien{},
+					Aliens: map[string]*pkg.Alien{},
 				}
 				// add name to 'set' and worldmap after city creation
 				cityNames[mapLine[0]] = true
@@ -64,7 +64,7 @@ func GenerateMap(rawMap []string) map[string]*pkg.City {
 					newCity := pkg.City{
 						Name:   match[k],
 						Links:  map[*pkg.City]bool{worldMap[mapLine[0]]: true},
-						Aliens: []*pkg.Alien{},
+						Aliens: map[string]*pkg.Alien{},
 					}
 					// add to worldmap, names
 					worldMap[newCity.Name] = &newCity
