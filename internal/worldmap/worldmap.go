@@ -52,6 +52,16 @@ func GenerateMap(rawMap []string) map[string]*pkg.City {
 				// add name to 'set' and worldmap after city creation
 				cityNames[mapLine[0]] = true
 				worldMap[mapLine[0]] = &initCity
+			} else {
+				// update initial for map printout
+				keys := map[string]bool{}
+				r := strings.Fields(worldMap[mapLine[0]].Initial)
+				for i := range r {
+					keys[r[i]] = true
+				}
+				if !keys[mapLine[j]] {
+					worldMap[mapLine[0]].Initial = worldMap[mapLine[0]].Initial + " " + mapLine[j]
+				}
 			}
 			// compile regex to find remaining cities in line from directions
 			r, _ := regexp.Compile("=(.*)")
