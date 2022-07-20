@@ -8,8 +8,12 @@ import (
 	"fmt"
 )
 
-func announceDestruction(cityName string, alienNames []string) {
+func announceDestruction(cityName string, aliens map[string]*utils.Alien) {
 	// announceDestruction handles printing fight info to console, including the oxford comma bc important
+	var alienNames []string
+	for i := range aliens {
+		alienNames = append(alienNames, aliens[i].Name)
+	}
 	var aliensList string
 	if len(alienNames) == 2 {
 		aliensList = alienNames[0] + " and " + alienNames[1]
@@ -24,39 +28,50 @@ func announceDestruction(cityName string, alienNames []string) {
 	fmt.Println(cityName + " has been destroyed by " + aliensList + "!")
 }
 
-func destroyCity(worldmap []utils.City) []utils.City {
-	// TODO: handle destruction of a city on the worldmap
-	//		step 1: check each city for multiple aliens
-	//for i := range worldmap {
-	//	aliens := worldmap[i].Aliens
-	//	if len(worldmap[i].Aliens) >= 2 {
-	//
-	//	}
-	//}
-	return []utils.City{}
+func destroyCity(city *utils.City, worldmap map[string]*utils.City, invaders map[string]utils.Alien) {
+	// destroyCity handles removal of a city from the worldmap
+	// remove city from all links
+	for i := range worldmap {
+		if worldmap[i].Links[city] {
+			delete(worldmap[i].Links, city)
+		}
+	}
+	// remove from worldmap
+	delete(worldmap, city.Name)
+	// remove from invader locations
+	for i := range invaders {
+		if invaders[i].Location == city {
+			delete(invaders, i)
+		}
+	}
 }
 
-func SimluateInvasion(numAliens int, worldmap map[string]*utils.City) {
-	// TODO: import worldmap and gen aliens, add gameplay logic
-	//		separate func for gameplay?
-
+func SimulateInvasion(numAliens int, worldmap map[string]*utils.City) map[string]*utils.City {
+	// SimulateInvasion handles creation of aliens, initial city assignment, and sim loop (up to 10k moves per alien)
 	invaders := aliens.GenAliens(numAliens)
 	// turn 0: init assignment of aliens to cities randomly based on worldmap input
 	for i := range invaders {
-		aliens.AssignAlien(&invaders[i], worldmap)
+		aliens.AssignAlien(invaders[i], worldmap)
 	}
 	// aliens move up to 10000 times
 	for j := 0; j <= 10000; j++ {
-		// turn 1: check overlap on aliens generation, destroy on impact!
+		// check overlap for cities in map, destroy on impact!
 		for k := range worldmap {
 			if len(worldmap[k].Aliens) >= 2 {
-				// TODO: announceDestruction and destroyCity
+				// if greater than 2 aliens in a city: announceDestruction and destroyCity
+				announceDestruction(worldmap[k].Name, worldmap[k].Aliens)
+				destroyCity(worldmap[k], worldmap, invaders)
 			}
-			for i := range invaders {
-				aliens.MoveAlien(&invaders[i], worldmap)
-			}
-			// TODO: turn n: all cities/aliens destroyed or 10,000 moves for each living aliens
 		}
-		// TODO: finally, print remaining cities in format of og file
+		// attempt to move each alien once per turn
+		// check if worldmap has been depleted:
+		if len(worldmap) == 0 {
+			continue
+		} else {
+			for i := range invaders {
+				aliens.MoveAlien(invaders[i], worldmap)
+			}
+		}
 	}
+	return worldmap
 }
