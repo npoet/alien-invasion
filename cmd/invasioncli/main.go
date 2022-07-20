@@ -16,8 +16,9 @@ func main() {
 	// read map from file
 	numAliens, err := strconv.Atoi(args[0])
 	pkg.Check(err)
+	// create string slice from map file and convert to simulation map
 	rawMap := worldmap.ReadRawMap("mapsdata/map_test.txt")
-	gameMap := worldmap.GenerateMap(rawMap)
+	simMap := worldmap.GenerateMap(rawMap)
 	// simulate invasion from read map
-	invasion.SimluateInvasion(numAliens, gameMap)
+	invasion.SimluateInvasion(numAliens, simMap)
 }
