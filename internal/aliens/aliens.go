@@ -3,6 +3,7 @@ package pkg
 import (
 	"alien-invasion/internal/pkg"
 	"github.com/brianvoe/gofakeit/v6"
+	"math/rand"
 	"strings"
 )
 
@@ -22,6 +23,33 @@ func GenAliens(numAliens int) []pkg.Alien {
 	return newAliens
 }
 
-func MoveAlien(alien *pkg.Alien, city *pkg.City) {
-	// TODO: handle moving aliens and updating aliens/city objects
+func AssignAlien(alien *pkg.Alien, worldmap map[string]*pkg.City) {
+	// AssignAlien handles assigning a given alien to a city and updating aliens/city objects
+	// get random city from map, select random seed and get keys (arbitrary order return + random seed)
+	i := rand.Intn(len(worldmap))
+	keys := make([]string, 0, len(worldmap))
+	for k := range worldmap {
+		keys = append(keys, k)
+	}
+	// add alien to random city
+	worldmap[keys[i]].Aliens = append(worldmap[keys[i]].Aliens, alien)
+	// add city to alien
+	alien.Location = worldmap[keys[i]]
+}
+
+func MoveAlien(alien *pkg.Alien, worldmap map[string]*pkg.City) {
+	// MoveAlien handles moving a given alien from their current city to a random one from its links
+	// get random city from Links, select random seed and get keys (arbitrary order return + random seed)
+	// only move alien if links are available
+	if len(alien.Location.Links) > 0 {
+		i := rand.Intn(len(alien.Location.Links))
+		keys := make([]pkg.City, 0, len(alien.Location.Links))
+		for k := range alien.Location.Links {
+			keys = append(keys, *k)
+		}
+		// add alien to random city from links
+		worldmap[keys[i].Name].Aliens = append(worldmap[keys[i].Name].Aliens, alien)
+		// add city to alien
+		alien.Location = worldmap[keys[i].Name]
+	}
 }
