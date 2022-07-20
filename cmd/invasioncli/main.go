@@ -20,5 +20,7 @@ func main() {
 	rawMap := worldmap.ReadRawMap("mapsdata/map_test.txt")
 	simMap := worldmap.GenerateMap(rawMap)
 	// simulate invasion from read map
-	invasion.SimulateInvasion(numAliens, simMap)
+	finalMap := invasion.SimulateInvasion(numAliens, simMap)
+	// print out remaining world state in original format 'Foo north=Bar west=Baz south=Qu-ux'
+	pkg.PrintMap(finalMap, rawMap)
 }
