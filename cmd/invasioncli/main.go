@@ -4,20 +4,23 @@ import (
 	"alien-invasion/internal/invasion"
 	"alien-invasion/internal/pkg"
 	"alien-invasion/internal/worldmap"
+	"flag"
 	"fmt"
-	"os"
 	"strconv"
 )
 
 func main() {
-	// get args from cli
-	args := os.Args[1:]
-	fmt.Println(args[0] + " aliens are invading!")
+	// define and parse flags from cli for optional testing file, numAliens
+	filename := flag.String("infile", "mapsdata/map_test.txt", "filename for map input")
+	aliens := flag.String("aliens", "5", "number of aliens for simulation")
+	flag.Parse()
+	// announce invasion
+	fmt.Println(*aliens + " aliens are invading!")
 	// read map from file
-	numAliens, err := strconv.Atoi(args[0])
+	numAliens, err := strconv.Atoi(*aliens)
 	pkg.Check(err)
 	// create string slice from map file and convert to simulation map
-	rawMap := worldmap.ReadRawMap("mapsdata/map_test.txt")
+	rawMap := worldmap.ReadRawMap(*filename)
 	simMap := worldmap.GenerateMap(rawMap)
 	// simulate invasion from read map
 	finalMap := invasion.SimulateInvasion(numAliens, simMap)
