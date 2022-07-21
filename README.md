@@ -3,16 +3,18 @@ Mad aliens are about to invade the earth, and you are tasked with simulating the
 
 World map inputs are stored in alien-invasion/mapsdata, assumed to be of format [CITY direction=CITY ...]
 
+Names created with https://github.com/brianvoe/gofakeit
+
 ### Build
 
 * From main directory run `go build cmd/invasioncli/main.go`
 
 ### Run
 
-* Run main.go with flag 'aliens' for number of aliens in simulation: `./main.go -aliens=20`
-* Can add optional flag 'infile' for other test maps: `./main.go -aliens=5 -infile=map.txt`
+* Run main with flag 'aliens' for number of aliens in simulation: `./main -aliens=20`
+* Can add optional flag 'infile' for other test maps: `./main -aliens=5 -infile=map.txt`
   * default map location is /mapsdata/map_test.txt
-* `./main.go` with no options given will default to a 20 alien simulation on the default test map
+* `./main` with no options given will default to a 20 alien simulation on the default test map
 
 ### Test
 
@@ -21,3 +23,17 @@ World map inputs are stored in alien-invasion/mapsdata, assumed to be of format 
   * /invasion
   * /pkg
   * /worldmap
+
+### Sample Output:
+
+* `./main -aliens=10`
+
+```
+10 aliens are invading!
+Qu-ux has been destroyed by Quamvoluptas and Consequaturet!
+Foo has been destroyed by Minimaoptio, Nihilvelit, and Eumnon!
+Baz has been destroyed by Quiillo, Etet, and Porrosed!
+Final map output:
+Bar west=Bee 
+Bee east=Bar 
+```
