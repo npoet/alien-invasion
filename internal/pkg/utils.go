@@ -5,16 +5,18 @@ import (
 	"strings"
 )
 
+// A City represents a place in a mapfile, holds links to other cities, some number of aliens during sim, and initial map directions
 type City struct {
-	Name    string
-	Links   map[*City]bool
-	Aliens  map[string]*Alien
-	Initial string
+	Name    string            // city name, example Foo
+	Links   map[*City]bool    // links to Cities created from initial directions
+	Aliens  map[string]*Alien // map of Alien objects located in City
+	Initial string            // initial directions from input map
 }
 
+// An Alien is an invader in the simulation, a number of which are created via command line input
 type Alien struct {
-	Name     string
-	Location *City
+	Name     string // alien name created from concatenated lourm ipsum text, example Eumnon
+	Location *City  // city where alien is currently located during sim
 }
 
 func Check(e error) {
