@@ -15,7 +15,7 @@ func main() {
 	aliens := flag.String("aliens", "20", "number of aliens for simulation")
 	flag.Parse()
 	// announce invasion
-	fmt.Println(*aliens + " aliens are invading!")
+	fmt.Println(*aliens + " aliens are invading X!")
 	// read map from file
 	numAliens, err := strconv.Atoi(*aliens)
 	pkg.Check(err)

@@ -1,9 +1,10 @@
 # alien-invasion
 Mad aliens are about to invade the earth, and you are tasked with simulating the invasion.
 
-World map inputs are stored in alien-invasion/mapsdata, assumed to be of format [CITY direction=CITY ...]
-
-Names created with https://github.com/brianvoe/gofakeit
+A command line interface is provided to simulate the alien invasion of the world of X. The program outputs details of 
+the simulation and the final map state after it completes.
+* World map inputs are stored in alien-invasion/mapsdata, assumed to be of format [CITY direction=CITY ...]
+* Names created with https://github.com/brianvoe/gofakeit
 
 ### Build
 
