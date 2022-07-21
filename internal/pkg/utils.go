@@ -47,6 +47,8 @@ func PrintMap(worldmap map[string]*City) {
 			}
 			fmt.Println()
 		}
+	} else {
+		fmt.Println("All of X has been destroyed.")
 	}
 }
 
