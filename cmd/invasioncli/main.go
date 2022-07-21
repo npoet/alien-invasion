@@ -11,7 +11,7 @@ import (
 
 func main() {
 	// define and parse flags from cli for optional testing file, numAliens
-	filename := flag.String("infile", "mapsdata/map_test.txt", "filename for map input")
+	filename := flag.String("infile", "internal/worldmap/mapsdata/map_test.txt", "filename for map input")
 	aliens := flag.String("aliens", "20", "number of aliens for simulation")
 	flag.Parse()
 	// announce invasion
