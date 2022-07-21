@@ -8,8 +8,7 @@ import (
 )
 
 func GenAliens(numAliens int) map[string]pkg.Alien {
-	// genAliens creates numAliens Aliens with a random city choice from the names given in cities []string
-	// The genAliens func should be used only to create the initial 'board' state once a map is imported
+	// genAliens creates and returns a map of name strings to numAliens Aliens
 	newAliens := map[string]pkg.Alien{}
 	for i := 0; i < numAliens; i++ {
 		// somehow the best way to create some alien-sounding names
